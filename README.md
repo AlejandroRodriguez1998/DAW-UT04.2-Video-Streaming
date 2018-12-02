@@ -7,3 +7,6 @@ Vamos a construir la estructura de objetos necesaria para implementar un pequeñ
  - Pagina test
  - Pagina principal
  - Comentarios
+
+ # Version 1.0.1
+ - Añadidas excepciones

@@ -25,10 +25,42 @@ function InvalidAccessDateException() {
 InvalidAccessDateException.prototype = new BaseException(); 
 InvalidAccessDateException.prototype.constructor = InvalidAccessDateException;
 
+//Excepciones de validación de parámetros. Reutilizables en todas las clases
+function ParameterValidationException() {
+	this.name = "ParameterValidationException";
+	this.message = "Error: Excepcion de validacion de parametros.";
+}
+ParameterValidationException.prototype = new BaseException(); //Heredamos de BaseException
+ParameterValidationException.prototype.constructor = ParameterValidationException;
+
 //Excepción personalizada para indicar valores vacios.
 function EmptyValueException(param) {
 	this.name = "EmptyValueException";
 	this.message = "Error: El parametro " + param + " no puede estar vacio.";
 }
-EmptyValueException.prototype = new BaseException(); //Heredamos de BaseException
+EmptyValueException.prototype = new ParameterValidationException(); //Heredamos de ParameterValidationException
 EmptyValueException.prototype.constructor = EmptyValueException;
+
+//Excepción de valor inválido
+function InvalidValueException(param, value) {
+	this.name = "InvalidValueException";
+	this.message = "Error: El parametro " + param + " tiene un valor invalido. (" + param + ": " + value + ")";
+}
+InvalidValueException.prototype = new ParameterValidationException(); //Heredamos de ParameterValidationException
+InvalidValueException.prototype.constructor = InvalidValueException;
+
+//Excepción acceso inválido a constructor
+function UninstantiatedObjectException(param) {
+	this.name = "UninstantiatedObjectException";
+	this.message = "No puede instanciar " + param + " objecto.";
+}
+UninstantiatedObjectException.prototype = new BaseException(); 
+UninstantiatedObjectException.prototype.constructor = UninstantiatedObjectException;
+
+//Excepción intento de instacia clase abstracta
+function AbstractClassException(classValue) {
+	this.name = "AbstractClassException";
+	this.message = classValue + " es una clase abstracta.";
+}
+AbstractClassException.prototype = new BaseException(); 
+AbstractClassException.prototype.constructor = AbstractClassException;
