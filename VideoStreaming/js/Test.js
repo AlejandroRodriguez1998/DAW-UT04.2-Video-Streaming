@@ -1,7 +1,8 @@
-
 function test(){
     testPerson();
     testCategory();
+    testMovie();
+    testSeason();
 }
 
 window.onload = test;
@@ -34,6 +35,13 @@ function testPerson(){
         console.log(error.toString());
     }
 
+    try{
+        var person2 = new Person("Alejan","Pa","",new Date(1998,06,31),"");
+        console.log(person2.toString());
+    }catch(error){
+        console.log(error.toString());
+    }
+
     console.log("");
 }
 
@@ -55,6 +63,31 @@ function testCategory(){
     try {
         var cate1 = new Category("Hola","Hi");
         console.log(cate1.toString());
+    } catch (error) {
+        console.log(error.toString());
+    }
+
+    console.log("");
+}
+
+function testMovie(){
+    console.log("**TESTEO CLASE MOVIE**");
+    try {
+        var mov1 = new Movie("Hola","",new Date(2020,11,03),"","","",[]);
+    } catch (error) {
+        console.log(error.toString());
+    }
+
+    console.log("");
+}
+
+function testSeason(){
+    console.log("**TESTEO CLASE SEASON**");
+    try {
+        var sea1 = new Season("Hola",[
+        {title:'Hola',episode: 'b',scenarios:[new Coordinate(12,20)]},
+        {title:'Hola',episode: 'b',scenarios:[new Coordinate(21,30)]}
+        ]);
     } catch (error) {
         console.log(error.toString());
     }

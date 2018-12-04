@@ -10,3 +10,7 @@ Vamos a construir la estructura de objetos necesaria para implementar un pequeñ
 
  # Version 1.0.1
  - Añadidas excepciones
+
+ # Version 1.0.2
+ - Cambios de nombres
+ - Correción objectVideoSystem

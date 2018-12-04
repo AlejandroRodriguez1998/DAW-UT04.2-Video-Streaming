@@ -11,9 +11,9 @@ function Person (name,lastname1,lastname2,born,picture) {
     name = typeof name !== 'undefined' ? name : "";
     if (name === "") throw new EmptyValueException("name");
     lastname1 = typeof lastname1 !== 'undefined' ? lastname1 : "";
-    if (lastname1 === "") throw new EmptyValueException("lastname1");
+	if (lastname1 === "") throw new EmptyValueException("lastname1");
     lastname2 = typeof lastname2 !== 'undefined' ? lastname2 : "";
-    if(!(born instanceof Date)){throw new InvalidAccessDateException();};
+    if(!(born instanceof Date)) throw new InvalidAccessException("Date");
     born = typeof born !== 'undefined' ? born : "";
     if (born === "") throw new EmptyValueException("born");
     picture = typeof picture !== 'undefined' ? picture : "";
@@ -63,7 +63,7 @@ function Person (name,lastname1,lastname2,born,picture) {
 			return _born;
 		},
 		set:function(value){
-            if(!(born instanceof Date)){throw new InvalidAccessDateException();};
+            if(!(born instanceof Date)) throw new InvalidAccessException("Date");
 
             value = typeof value !== 'undefined' ? value : "";
             if (value === "") throw new EmptyValueException("born");
@@ -111,6 +111,8 @@ function Category(name,description){
 			return _name;
 		},
 		set:function(value){
+			value = typeof value !== 'undefined' ? value : "";
+			if (value === "") throw new EmptyValueException("name");
 			_name = value;
 		}		
 	});
@@ -120,6 +122,7 @@ function Category(name,description){
 			return _description;
 		},
 		set:function(value){
+			value = typeof value !== 'undefined' ? value : "";
 			_description = value;
 		}		
 	});
@@ -142,8 +145,8 @@ function Resource(duration,link,audios,subtitles){
 	if (duration === 0) throw new EmptyValueException("duration");
 	link = typeof link !== 'undefined' ? link : "";
 	if (link === "") throw new EmptyValueException("link");
-	audios = typeof audios !== 'undefined' ? audios : "";
-	subtitles = typeof subtitles !== 'undefined' ? subtitles : "";
+	audios = typeof audios !== 'undefined' ? audios : [];
+	subtitles = typeof subtitles !== 'undefined' ? subtitles : [];
 
 	//Atributos privados del objeto
 	var _duration = duration;
@@ -157,6 +160,8 @@ function Resource(duration,link,audios,subtitles){
 			return _duration;
 		},
 		set:function(value){
+			value = typeof value !== 'undefined' ? value : 0;
+			if (value === 0) throw new EmptyValueException("duration");
 			_duration = value;
 		}		
 	});
@@ -166,6 +171,8 @@ function Resource(duration,link,audios,subtitles){
 			return _link;
 		},
 		set:function(value){
+			value = typeof value !== 'undefined' ? value : "";
+			if (value === "") throw new EmptyValueException("link");
 			_link = value;
 		}		
 	});
@@ -175,6 +182,7 @@ function Resource(duration,link,audios,subtitles){
 			return _audios;
 		},
 		set:function(value){
+			value = typeof value !== 'undefined' ? value : [];
 			_audios = value;
 		}		
 	});
@@ -184,6 +192,7 @@ function Resource(duration,link,audios,subtitles){
 			return _subtitles;
 		},
 		set:function(value){
+			value = typeof value !== 'undefined' ? value : [];
 			_subtitles = value;
 		}		
 	});
@@ -200,14 +209,19 @@ function Production(title,nationality,publication,synopsis,image){
 	//Comprobamos si la funcion se invoca con el operador new
 	if (!(this instanceof Production)){
         throw new InvalidAccessConstructorException();
-    };
+	};
+	//Comprobación para que Production sea clase abstracta.
+	if ((this.constructor === Production)) {
+        throw new AbstractClassException("Production");
+    }
 
 	//Validación de parámetros obligatorios
 	title = typeof title !== 'undefined' ? title : "";
 	if (title === "") throw new EmptyValueException("title");
+	nationality = typeof nationality !== 'undefined' ? nationality : "";
+	if(!(publication instanceof Date)) throw new InvalidAccessException("Date");
 	publication = typeof publication !== 'undefined' ? publication : "";
 	if (publication === "") throw new EmptyValueException("publication");
-	nationality = typeof nationality !== 'undefined' ? nationality : "";
 	synopsis = typeof synopsis !== 'undefined' ? synopsis : "";
 	image = typeof image !== 'undefined' ? image : "";
 
@@ -224,6 +238,8 @@ function Production(title,nationality,publication,synopsis,image){
 			return _title;
 		},
 		set:function(value){
+			value = typeof value !== 'undefined' ? value : "";
+			if (value === "") throw new EmptyValueException("title");
 			_title = value;
 		}		
 	});
@@ -233,6 +249,7 @@ function Production(title,nationality,publication,synopsis,image){
 			return _nationality;
 		},
 		set:function(value){
+			value = typeof value !== 'undefined' ? value : "";
 			_nationality = value;
 		}		
 	});
@@ -242,6 +259,9 @@ function Production(title,nationality,publication,synopsis,image){
 			return _publication;
 		},
 		set:function(value){
+			if(!(value instanceof Date)) throw new InvalidAccessException("Date");
+			value = typeof value !== 'undefined' ? value : "";
+			if (value === "") throw new EmptyValueException("publication");
 			_publication = value;
 		}		
 	});
@@ -251,6 +271,7 @@ function Production(title,nationality,publication,synopsis,image){
 			return _synopsis;
 		},
 		set:function(value){
+			value = typeof value !== 'undefined' ? value : "";
 			_synopsis = value;
 		}		
 	});
@@ -260,6 +281,7 @@ function Production(title,nationality,publication,synopsis,image){
 			return _image;
 		},
 		set:function(value){
+			value = typeof value !== 'undefined' ? value : "";
 			_image = value;
 		}		
 	});
@@ -272,39 +294,100 @@ Production.prototype.toString = function(){
 }
 
 /* Objeto Movie que hereda de Production*/
-function Movie(){
+function Movie(title,nationality,publication,synopsis,image,resource,locations){
 	//Invocamos el constructor de la clase padre
     Production.call(this,title,nationality,publication,synopsis,image);
-    
+	
+	//Validación de parámetros
+	if(!(resource instanceof Resource) && !(resource === "")) throw new InvalidAccessException("Resource");
+	resource = typeof resource !== 'undefined' ? resource : "";
+	for(var i=0; i < locations.length; i++){
+		if(!(locations[i] instanceof Coordinate)) throw new InvalidAccessException("Coordinate");
+	}//EN UN FUTURO ESTO POSIBLEMENTE HABRÁ QUE CAMBIARLO COMO RESOURCE
+	locations = typeof locations !== 'undefined' ? locations : [];
+
+	//Atributos privados del objeto
     var _resource = resource;
-    var _cordinate = cordinate;
+	var _locations = locations;
+	
+	//Propiedades de acceso a los atributos privados
+	Object.defineProperty(this,'resource',{
+		get:function(){
+			return _resource;
+		},
+		set:function(value){
+			if(!(value instanceof Resource) && !(resource === "")) throw new InvalidAccessException("Resource");
+			value = typeof value !== 'undefined' ? value : "";
+			_resource = value;
+		}
+	});
+
+	Object.defineProperty(this,'locations',{
+		get:function(){
+			return _locations;
+		},
+		set:function(value){
+			for(var i=0; i < value.length; i++){
+				if(!(value[i] instanceof Coordinate)) throw new InvalidAccessException("Coordinate");
+			}
+			value = typeof value !== 'undefined' ? value : [];
+			_locations = value;
+		}
+	});
+
 }
 Movie.prototype = Object.create(Production.prototype);
 Movie.prototype.constructor = Movie;
 
 /* Objeto Serie que hereda de Production*/
-function Serie(){
+function Serie(title,nationality,publication,synopsis,image,seasons){
 	//Invocamos el constructor de la clase padre
 	Production.call(this,title,nationality,publication,synopsis,image);
+
+	for(var i=0; i < seasons.length; i++){
+		if(!(seasons[i] instanceof Season)) throw new InvalidAccessException("Season");
+	}//EN UN FUTURO ESTO POSIBLEMENTE HABRÁ QUE CAMBIARLO COMO RESOURCE
+	seasons = typeof seasons !== 'undefined' ? seasons : [];
+
+	var _seasons = seasons;
+
+	Object.defineProperty(this,'seasons',{
+		get:function(){
+			return _seasons;
+		},
+		set:function(value){
+			for(var i=0; i < value.length; i++){
+				if(!(value[i] instanceof Season)) throw new InvalidAccessException("Season");
+			}
+			value = typeof value !== 'undefined' ? value : [];
+			_seasons = value;
+		}
+	});
 }
 Serie.prototype = Object.create(Production.prototype);
 Serie.prototype.constructor = Serie;
 
 /* Objeto Season */
-function Season(title,episodies){
+function Season(title,episodes){
     //Comprobamos si la funcion se invoca con el operador new
-    if (!(this instanceof User)){
+    if (!(this instanceof Season)){
         throw new InvalidAccessConstructorException();
     };
 
     //Validación de parámetros obligatorios
     title = typeof title !== 'undefined' ? title : "";
-    if (title === "") throw new EmptyValueException("title");
-    episodies = typeof episodies !== 'undefined' ? episodies : "";
+	if (title === "") throw new EmptyValueException("title");
+	for(var i=0; i < episodes.length; i++){
+		if(!(episodes[i].episode instanceof Resource)) throw new InvalidAccessException('Resource');
+		for(var y = 0; y < episodes[i].scenarios.length; y++ ){
+			if(!(episodes[i].scenarios[y] instanceof Coordinate)) throw new InvalidAccessException("Coordinate");
+		}
+	}
+    episodes = typeof episodes !== 'undefined' ? episodes : [];
 
     //Atributos privados del objeto
     var _title = title;
-    var _episodies = episodies;
+    var _episodes = episodes;
 
     //Propiedades de acceso a los atributos privados
     Object.defineProperty(this,'title',{
@@ -313,17 +396,25 @@ function Season(title,episodies){
 		},
 		set:function(value){
 			value = typeof value !== 'undefined' ? value : "";
+			if (value === "") throw new EmptyValueException("title");
 			_title = value;
 		}
     });
 
-    Object.defineProperty(this,'episodies',{
+    Object.defineProperty(this,'episodes',{
         get:function(){
-			return _episodies;
+			return _episodes;
 		},
 		set:function(value){
-			value = typeof value !== 'undefined' ? value : "";
-			_episodies = value;
+			for(var i=0; i < value.length; i++){
+				if(!(value[i].episode instanceof Resource)) throw new InvalidAccessException('Resource');
+				for(var y = 0; y < value[i].scenarios.length; y++ ){
+					if(!(value[i].scenarios[y] instanceof Coordinate)) throw new InvalidAccessException("Coordinate");
+				}
+			}
+
+			value = typeof value !== 'undefined' ? value : [];
+			_episodes = value;
 		}
     });
 }
@@ -390,6 +481,8 @@ function User(username,email,password){
 			return _password;
 		},
 		set:function(value){
+			value = typeof value !== 'undefined' ? value : "";
+			if (value === "") throw new EmptyValueException("password")
 			_password = value;
 		}		
     });
@@ -441,5 +534,8 @@ function Coordinate(latitude, longitude){
 	});		
 
 }
-Coords.prototype = {};
-Coords.prototype.constructor = Coords;
+Coordinate.prototype = {};
+Coordinate.prototype.constructor = Coordinate;
+Coordinate.prototype.toString = function(){
+
+}
