@@ -74,6 +74,7 @@ function testMovie(){
     console.log("**TESTEO CLASE MOVIE**");
     try {
         var mov1 = new Movie("Hola","",new Date(2020,11,03),"","","",[]);
+        console.log(mov1.toString());
     } catch (error) {
         console.log(error.toString());
     }
@@ -92,3 +93,4 @@ function testSeason(){
         console.log(error.toString());
     }
 }
+

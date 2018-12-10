@@ -287,10 +287,10 @@ function Production(title,nationality,publication,synopsis,image){
 	});
 }
 Production.prototype = {};
-Production.prototype.constructor = Resource;
+Production.prototype.constructor = 	Production;
 Production.prototype.toString = function(){
-	return "Titulo: " + this.title + "Nacionalidad: " + this.nationality + "Fecha Publicacion: " + this.publication
-	+ "Synopsis: " + this.synopsis + "Imagen: " + this.image;
+	return "Titulo: " + this.title + " Nacionalidad: " + this.nationality + " Fecha Publicacion: " + this.publication
+	+ " Synopsis: " + this.synopsis + " Imagen: " + this.image;
 }
 
 /* Objeto Movie que hereda de Production*/
@@ -338,6 +338,9 @@ function Movie(title,nationality,publication,synopsis,image,resource,locations){
 }
 Movie.prototype = Object.create(Production.prototype);
 Movie.prototype.constructor = Movie;
+Movie.prototype.toString = function(){
+	return Production.prototype.toString.call(this) + " Resource: " + this.resource + " Locations: " + this.locations;
+}
 
 /* Objeto Serie que hereda de Production*/
 function Serie(title,nationality,publication,synopsis,image,seasons){
@@ -366,6 +369,9 @@ function Serie(title,nationality,publication,synopsis,image,seasons){
 }
 Serie.prototype = Object.create(Production.prototype);
 Serie.prototype.constructor = Serie;
+Serie.prototype.toString = function(){
+	return Production.prototype.toString.call(this) + " Seasons: " + seasons;
+}
 
 /* Objeto Season */
 function Season(title,episodes){
@@ -537,5 +543,5 @@ function Coordinate(latitude, longitude){
 Coordinate.prototype = {};
 Coordinate.prototype.constructor = Coordinate;
 Coordinate.prototype.toString = function(){
-
+	return "Latitud: " + this.latitude + " Longitud: " + this.longitude;
 }
