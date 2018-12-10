@@ -370,7 +370,7 @@ function Serie(title,nationality,publication,synopsis,image,seasons){
 Serie.prototype = Object.create(Production.prototype);
 Serie.prototype.constructor = Serie;
 Serie.prototype.toString = function(){
-	return Production.prototype.toString.call(this) + " Seasons: " + seasons;
+	return Production.prototype.toString.call(this) + " Seasons: " + this.seasons;
 }
 
 /* Objeto Season */
@@ -389,11 +389,11 @@ function Season(title,episodes){
 			if(!(episodes[i].scenarios[y] instanceof Coordinate)) throw new InvalidAccessException("Coordinate");
 		}
 	}
-    episodes = typeof episodes !== 'undefined' ? episodes : [];
+	episodes = typeof episodes !== 'undefined' ? episodes : [];
 
     //Atributos privados del objeto
     var _title = title;
-    var _episodes = episodes;
+	var _episodes = episodes;
 
     //Propiedades de acceso a los atributos privados
     Object.defineProperty(this,'title',{
@@ -427,7 +427,7 @@ function Season(title,episodes){
 Season.prototype = {};
 Season.prototype.constructor = Season;
 Season.prototype.toString = function(){
-    return "Titulo: " + this.title + "Episodios: " + this.episodies;
+    return "Titulo: " + this.title + " Episodios: " + this.episodes[0];
 };
 
 /* Objeto User */
@@ -496,7 +496,7 @@ function User(username,email,password){
 User.prototype = {};
 User.prototype.constructor = User;
 User.prototype.toString = function(){
-    return "Usuario: " + this.username + "(" + this.email + ")" + "Contraseña: " + this.password;
+    return "Usuario: " + this.username + "(" + this.email + ")" + " Contraseña: " + this.password;
 };
 
 /* Objeto Coordinate */

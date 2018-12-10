@@ -18,3 +18,7 @@ Vamos a construir la estructura de objetos necesaria para implementar un pequeñ
 # Version 1.0.3
  - Metodos de production, actores, usuarios, directores terminados
  - Comentarios 
+
+# Version 1.0.4
+ - Test hecho y comprobado
+ - Añadidos mas comentarios
